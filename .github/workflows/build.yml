@@ -1,0 +1,30 @@
+name: Build XEX
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependencias
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgmp3-dev libmpfr-dev libmpc-dev texinfo gettext build-essential
+
+      - name: LibXenon toolchain
+        run: |
+          git clone https://github.com/Free60Project/libxenon.git
+          cd libxenon/toolchain
+          ./build-xenon-toolchain toolchain
+
+      - name: Compilar
+        run: |
+          export DEVKITXENON=/usr/local/xenon
+          export PATH=$PATH:$DEVKITXENON/bin
+          make
+
+      - name: Upload XEX
+        uses: actions/upload-artifact@v4
+        with:
+          name: file_manager_xb
+          path: file_manager_xb.xex
