@@ -1,3 +1,4 @@
+
 DEVKIT  := /usr/local/xenon
 CC      := $(DEVKIT)/bin/xenon-gcc
 XEX     := $(DEVKIT)/bin/xenon-xex
