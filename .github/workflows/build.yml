@@ -17,6 +17,22 @@ jobs:
           cd libxenon/toolchain
           ./build-xenon-toolchain toolchain
 
+      - name: Criar Makefile certo
+        run: |
+          printf 'DEVKIT  := /usr/local/xenon\n' > Makefile
+          printf 'CC      := $$(DEVKIT)/bin/xenon-gcc\n' >> Makefile
+          printf 'XEX     := $$(DEVKIT)/bin/xenon-xex\n\n' >> Makefile
+          printf 'CFLAGS  := -I$$(DEVKIT)/include -O2 -Wall -std=c99\n' >> Makefile
+          printf 'LDFLAGS := -L$$(DEVKIT)/lib -lxenon -lfat -lusb -lm\n\n' >> Makefile
+          printf 'all: file_manager_xb.xex\n\n' >> Makefile
+          printf 'file_manager_xb.elf: main.c\n' >> Makefile
+          printf '\t$$(CC) $$(CFLAGS) main.c -o $$@ $$(LDFLAGS)\n\n' >> Makefile
+          printf 'file_manager_xb.xex: file_manager_xb.elf xex.xml\n' >> Makefile
+          printf '\t$$(XEX) xex.xml file_manager_xb.elf file_manager_xb.xex\n\n' >> Makefile
+          printf 'clean:\n' >> Makefile
+          printf '\trm -f *.elf *.xex\n' >> Makefile
+          cat Makefile
+
       - name: Compilar
         run: |
           export DEVKITXENON=/usr/local/xenon
