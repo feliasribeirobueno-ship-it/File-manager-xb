@@ -7,8 +7,8 @@ LDFLAGS := -L$(DEVKIT)/lib -lxenon -lfat -lusb -lm
 
 all: file_manager_xb.xex
 
-file_manager_xb.elf: Principal.c
-	$(CC) $(CFLAGS) Principal.c -o $@ $(LDFLAGS)
+file_manager_xb.elf: main.c
+	$(CC) $(CFLAGS) main.c -o $@ $(LDFLAGS)
 
 file_manager_xb.xex: file_manager_xb.elf xex.xml
 	$(XEX) xex.xml file_manager_xb.elf file_manager_xb.xex
